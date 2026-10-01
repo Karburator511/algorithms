@@ -1,0 +1,3 @@
+MOVE A B
+MOVE A C
+MOVE B C
