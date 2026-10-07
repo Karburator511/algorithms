@@ -1,29 +1,38 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-#include "../stack/stack.h"
+#include "stack.h"
+
+#include <cstddef>
 #include <string>
 
 
 class Interpreter
 {
-
 private:
-
     Stack rods[3];
 
+    std::string inputData;
+    std::size_t inputPosition;
 
-    bool move(int from, int to);
+    std::string outputData;
+
+
+    bool pushToRod(int rod, int value);
+
+    int popFromRod(int rod);
+
+    bool execute(char command);
 
 
 public:
+    Interpreter();
 
-    void loadInput(std::string file);
+    bool loadInput(const std::string &file);
 
-    void runScript(std::string file);
+    bool runScript(const std::string &file);
 
-    void printResult();
-
+    void printResult() const;
 };
 
 

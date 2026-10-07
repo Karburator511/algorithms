@@ -1,73 +1,63 @@
 add_executable(
     HanoiInterpreter
     main.cpp
-    list/list.cpp
-    stack/stack.cpp
     interpreter/interpreter.cpp
 )
 
+target_include_directories(
+    HanoiInterpreter
+    PRIVATE
+    ../LibraryCPPClass
+)
 
-add_executable(
-    TestHanoiList
-    tests/test_list.cpp
-    list/list.cpp
+target_link_libraries(
+    HanoiInterpreter
+    LibraryCPPClass
 )
 
 
-add_executable(
-    TestHanoiStack
-    tests/test_stack.cpp
-    list/list.cpp
-    stack/stack.cpp
+function(add_hanoi_test NAME SCRIPT INPUT EXPECTED)
+
+    add_test(
+        NAME ${NAME}
+
+        COMMAND
+            ${CMAKE_COMMAND}
+            "-DPROGRAM=$<TARGET_FILE:HanoiInterpreter>"
+            "-DSCRIPT=${CMAKE_CURRENT_SOURCE_DIR}/tests/${SCRIPT}"
+            "-DINPUT=${CMAKE_CURRENT_SOURCE_DIR}/tests/${INPUT}"
+            "-DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/tests/${EXPECTED}"
+            -P
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/run_test.cmake"
+    )
+
+endfunction()
+
+
+add_hanoi_test(
+    TestHanoiExample
+    example.script
+    example.input
+    example.expected
 )
 
-
-add_test(
-    NAME TestHanoiList
-    COMMAND TestHanoiList
+add_hanoi_test(
+    TestHanoiDuplicate
+    duplicate.script
+    duplicate.input
+    duplicate.expected
 )
 
-
-add_test(
-    NAME TestHanoiStack
-    COMMAND TestHanoiStack
+add_hanoi_test(
+    TestHanoiMove12
+    move12.script
+    move12.input
+    move12.expected
 )
 
-
-add_test(
-    NAME TestHanoiOneDisk
-    COMMAND HanoiInterpreter
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/script1.txt
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/input1.txt
-)
-
-set_property(
-    TEST TestHanoiOneDisk
-    PROPERTY PASS_REGULAR_EXPRESSION "C: 1"
-)
-
-
-add_test(
-    NAME TestHanoiTwoDisks
-    COMMAND HanoiInterpreter
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/script2.txt
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/input2.txt
-)
-
-set_property(
-    TEST TestHanoiTwoDisks
-    PROPERTY PASS_REGULAR_EXPRESSION "C: 2 1"
-)
-
-
-add_test(
-    NAME TestHanoiThreeDisks
-    COMMAND HanoiInterpreter
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/script3.txt
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/input3.txt
-)
-
-set_property(
-    TEST TestHanoiThreeDisks
-    PROPERTY PASS_REGULAR_EXPRESSION "C: 3 2 1"
+add_hanoi_test(
+    TestHanoiMove23
+    move23.script
+    move23.input
+    move23.expected
 )
