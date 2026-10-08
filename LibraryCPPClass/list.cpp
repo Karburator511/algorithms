@@ -115,24 +115,24 @@ const List::Item *List::last() const
 
 List::Item *List::insert(Data data)
 {
-    return insert_after(nullptr, data);
+    Item *newItem = new Item(data, this);
+
+    newItem->nextItem = firstItem;
+    firstItem = newItem;
+
+    if (lastItem == nullptr)
+        lastItem = newItem;
+
+    return newItem;
 }
 
 
 List::Item *List::insert_after(Item *item, Data data)
 {
-    Item *newItem = new Item(data, this);
-
     if (item == nullptr)
-    {
-        newItem->nextItem = firstItem;
-        firstItem = newItem;
+        return insert(data);
 
-        if (lastItem == nullptr)
-            lastItem = newItem;
-
-        return newItem;
-    }
+    Item *newItem = new Item(data, this);
 
     newItem->nextItem = item->nextItem;
     item->nextItem = newItem;
